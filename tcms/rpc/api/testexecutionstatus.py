@@ -4,6 +4,7 @@
 
 from modernrpc.core import rpc_method
 
+from tcms.rpc.api.utils import translate_query
 from tcms.rpc.decorators import permissions_required
 from tcms.testruns.models import TestExecutionStatus
 
@@ -21,8 +22,4 @@ def filter(query):  # pylint: disable=redefined-builtin
         :return: Serialized list of :class:`tcms.testruns.models.TestExecutionStatus` objects
         :rtype: list(dict)
     """
-    return list(
-        TestExecutionStatus.objects.filter(**query)
-        .values("id", "name", "weight", "icon", "color")
-        .distinct()
-    )
+    return translate_query(TestExecutionStatus.objects.filter(**query).distinct())

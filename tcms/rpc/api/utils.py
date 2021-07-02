@@ -1,7 +1,8 @@
-# Copyright (c) 2019-2020 Alexander Todorov <atodorov@MrSenko.com>
+# Copyright (c) 2019-2021 Alexander Todorov <atodorov@MrSenko.com>
 
 # Licensed under the GPL 2.0: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
+from django.forms.models import model_to_dict
 from django.utils.module_loading import import_string
 
 from tcms.testcases.models import BugSystem
@@ -18,3 +19,16 @@ def tracker_from_url(url, request):
             return import_string(bug_system.tracker_type)(bug_system, request)
 
     return None
+
+
+def translate_query(query):
+    """
+    Traverse the query so that we can trigger Vinaigrette and obtain
+    the fields with their translated values. See
+    https://github.com/ecometrica/django-vinaigrette/issues/47
+    """
+    result = []
+    for obj in query:
+        result.append(model_to_dict(obj))
+
+    return result
