@@ -1,9 +1,9 @@
 FROM docker pull redhat/ubi8
 
-RUN yum install python38 mariadb-connector-c libpq \
+RUN yum install -y python38 mariadb-connector-c libpq \
     httpd python38-mod_wsgi mod_ssl sscg tar && \
-    microdnf --nodocs update && \
-    microdnf clean all
+    yum update -y && \
+    yum clean all -y 
 
 # Apache configuration for non-root users
 EXPOSE 8080
