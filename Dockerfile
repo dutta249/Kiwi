@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/ubi-minimal
+FROM centos
 
 RUN microdnf --nodocs install python38 mariadb-connector-c libpq \
     httpd python38-mod_wsgi mod_ssl sscg tar && \
@@ -30,17 +30,7 @@ COPY ./dist/venv/ /venv
 COPY ./manage.py /Kiwi/
 # create directories so we can properly set ownership for them
 RUN mkdir /Kiwi/ssl /Kiwi/static /Kiwi/uploads
-# generate self-signed SSL certificate
-RUN /usr/bin/sscg -v -f \
-    --country BG --locality Sofia \
-    --organization "Kiwi TCMS" \
-    --organizational-unit "Quality Engineering" \
-    --ca-file       /Kiwi/static/ca.crt     \
-    --cert-file     /Kiwi/ssl/localhost.crt \
-    --cert-key-file /Kiwi/ssl/localhost.key
-RUN sed -i "s/tcms.settings.devel/tcms.settings.product/" /Kiwi/manage.py && \
-    ln -s /Kiwi/ssl/localhost.crt /etc/pki/tls/certs/localhost.crt && \
-    ln -s /Kiwi/ssl/localhost.key /etc/pki/tls/private/localhost.key
+
 
 
 # collect static files
