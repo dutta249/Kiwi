@@ -1,4 +1,4 @@
-FROM centos
+FROM docker pull redhat/ubi8
 
 RUN microdnf --nodocs install python38 mariadb-connector-c libpq \
     httpd python38-mod_wsgi mod_ssl sscg tar && \
